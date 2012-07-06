@@ -1,3 +1,5 @@
+![Screenshot of the first committed version of Cloudfall](screenshot.png)
+
 ## Sorry
 
 I don't seem to have an actual readme for this, so in lieu of something which may be moderately useful on a github description and summary page, I'll copy and paste the little blurb which is displayed when a user opens Cloudfall for the first time.
