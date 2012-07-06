@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CloudFall</title>
+  <style type="text/css" media="screen">
+    body {
+        overflow: hidden;
+    }
+
+    ::-webkit-scrollbar{
+        width:15px;
+    }
+
+     ::-webkit-scrollbar-button:start:decrement,
+     ::-webkit-scrollbar-button:end:increment {
+        height: 0px;
+        width: 0px;
+        display: block;
+        background-color: rgba(231,231,231,1);
+    }
+
+    ::-webkit-scrollbar-track-piece {
+        background-color: rgba(231,231,231,1);
+        background-image: -webkit-linear-gradient(left, rgba(207,207,207,1),rgba(176,176,176,1));
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+        width: 10px;
+    }
+
+    ::-webkit-scrollbar-track-piece:horizontal {
+      background-image: -webkit-linear-gradient(top, rgba(207,207,207,1),rgba(176,176,176,1));
+    }
+
+    ::-webkit-scrollbar-thumb:vertical {
+        height: 50px;
+        background-color: #585858;
+        padding: 3px;
+        -webkit-border-radius: 20px;
+        border: 2px solid rgba(207,207,207,1);
+        background-image: -webkit-linear-gradient(left, #8999b0,  #5e7392);
+         -webkit-box-shadow: inset 0px 0px 3px rgba(0,0,0,0.5); 
+        width: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:horizontal {
+        height: 50px;
+        background-color: #585858;
+        padding: 3px;
+        -webkit-border-radius: 20px;
+        border: 2px solid rgba(207,207,207,1);
+        background-image: -webkit-linear-gradient(top, #8999b0,  #5e7392);
+         -webkit-box-shadow: inset 0px 0px 3px rgba(0,0,0,0.5); 
+        width: 10px;
+    }
+
+    .dark ::-webkit-scrollbar-button:start:decrement,
+    .dark ::-webkit-scrollbar-button:end:increment {
+        height: 2px;
+        display: block;
+        background-color: #1d1d1d;
+    }
+
+    .dark ::-webkit-scrollbar-track-piece {
+        background-color: #1d1d1d;
+        background-image: -webkit-linear-gradient(left, #212121, #323232);
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+        width: 10px;
+    }
+    .dark ::-webkit-scrollbar-track-piece:horizontal {
+        background-image: -webkit-linear-gradient(top, #212121, #323232);
+    }
+
+    .dark ::-webkit-scrollbar-thumb:vertical {
+        height: 50px;
+        background-color: #585858;
+        background-image: -webkit-linear-gradient(left, #4a4a4a, #404040);
+        padding: 3px;
+        -webkit-border-radius: 20px;
+        border: 3px solid #1d1d1d;
+        border-right-color: #323232;
+        border-left-color: #212121;
+         -webkit-box-shadow: inset 1px 1px 1px rgba(255,255,255,0.1); 
+        width: 10px;
+    }
+    .dark ::-webkit-scrollbar-thumb:horizontal {
+        height: 50px;
+        background-color: #585858;
+        background-image: -webkit-linear-gradient(top, #4a4a4a, #404040);
+        padding: 3px;
+        -webkit-border-radius: 20px;
+        border: 3px solid #1d1d1d;
+        border-right-color: #323232;
+        border-left-color: #212121;
+         -webkit-box-shadow: inset 1px 1px 1px rgba(255,255,255,0.1); 
+        width: 10px;
+    }
+
+    .ace_sb div, #list {
+      min-height: 101%;
+      min-height: -webkit-calc(100% + 1px);
+    }
+
+    #editor { 
+        margin: 0;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+
+    .tabs #editor {
+        top: 35px;
+    }
+    .tab-list {
+      display: none;
+    }
+    .tabs .tab-list {
+      display: block;
+    }
+    #status {
+      position: absolute;
+      top: 8px;
+      right: 30px;
+    }
+    .tabs #status {
+      top: 5px;
+      right: 7px;
+    }
+    #status img {
+      top: 2px;
+    }
+
+    #command {
+      position: absolute;
+      bottom: 10px;
+      width: 40%;
+      min-width: 400px;
+      border-radius: 2px;
+      right: 30px;
+      z-index: 42;
+      padding: 4px;
+      font-family: sans-serif;
+      color: white;
+      background: -webkit-linear-gradient(left, rgba(207,207,207,1),rgba(176,176,176,1));
+      border: 1px solid #9C9C9C;
+    }
+
+    .dark #command {
+      border: 1px solid gray;
+      background: #3D3D3D;
+    }
+    
+    #list b {
+      color: inherit;
+    }
+
+    .dark #list b {
+      color: white;
+    }
+    
+    #text {
+      width: 100%;
+      padding-top: 2px;
+      padding-bottom: 2px;
+      border-radius: 2px;
+      background: rgba(231, 231, 231, 1);
+      border: 1px solid #9C9C9C;
+    }
+
+    .dark #text {
+      background: #CCC;
+      border: 1px solid gray;
+    }
+
+    #listcontainer {
+      height: 200px;
+      overflow-y: scroll;
+      overflow-x: hidden;
+      padding: 1px;
+      -webkit-user-select: none;
+      cursor: default;
+      margin-bottom: 2px;
+      background: -webkit-linear-gradient(top, rgba(255, 255, 255, 1) 0%,rgba(231, 231, 231, 1) 30%);
+      border: 1px solid #9C9C9C;
+    }
+
+    .dark #listcontainer {
+      background: #626368;
+      border: none;
+    }
+
+    #list .item {
+      padding: 3px;
+      overflow: auto;
+      word-wrap: break-word;
+      
+      border-bottom: 1px solid #9C9C9C;
+      color: black;
+    }
+    .dark #list .item {
+      color: #CCC;
+      border-bottom: 1px solid gray;
+    }
+
+    #list .item.selected {
+      background: #B5D5FF;
+    }
+    .dark #list .item.selected {
+      background: #3F3F3F;
+    }
+
+    #list .item .path {
+      color: #4C5CB1;
+    }
+    .dark #list .item .path {
+      color: #A0A0A0;
+    }
+    #list .item .size {
+      float: right;
+      color: #A0A0A0;
+    }
+
+    #wordcount {
+      font-size: small;
+      font-family: sans-serif;
+      display: inline;
+    }
+
+    .dark #wordcount {
+      color: white;
+    }
+  </style>
+  <link rel="stylesheet" href="editor-tab.css">
+</head>
+<body class="dark tabs">
+  <div id="tabcontainer">
+    <ul class="tab-list" id="tabbar">
+
+    </ul>
+<!-- Added in two other elements -->
+   <div class="clearfix"></div>
+   <div class="bar"></div>
+ </div>
+
+<pre id="editor">Welcome to CloudFall. Yeah, I'm aware how dumb it sounds, but the fact that the new James Bond movie is going to be called Skyfall essentially demolishes any hope of using that name. But rather than using this as a vindication of how cool that name would be and abandoning it for some novel name, I'm just going to contrive something in a similar vain, hence the current working name. But rather than spending the first few lines complaining about the name of the product, I should probably lay down what exactly this project aims to be. It's a text editor, not a terribly glamorous concept, I know, and this is especially not a terribly great time to start. This is hardly the first text editor, and certainly will not be the last (until this either never finishes or the world actually does end by the end of this year). It's not the most full featured or anything else. So why does it exist?
+
+Because I love what SourceKit could have become. SourceKit was this awesome chrome app which saved files on Dropbox and that was just something so astonishingly useful. But there were a few features that I always wanted but never quite got, but I never actually used SourceKit much. A few months ago I started using a new desktop text editor which was cross platform and worked well on Windows, Mac and Linux, and I for the first time thought I knew exactly I wanted out of a text editor. My main laptop (note, not main computer) is a Chromebook (specifically the Samsung Series 5, the first one). Despite the fact it's the model with the 3G modem, I've always wanted whatever text editor I used to work offline.
+
+This is basically the Ace text editing component from Cloud9 IDE with some Dropbox syncing guts ripped out of SourceKit with some custom CSS and JS to save to the local file system. It's fairly minimalistic, probably less so than SourceKit but much simpler and lighter than the behemoth which is Cloud9.
+
+There are two main non-obvious interfaces to this application. The obvious one is of course the giant blank text input space which you should see this text inside. Feel free to edit this and insert whatever notes you may find useful, or indulge your pedantic grammar nazi tendencies by snarkily substituting my linguistic malapropisms. 
+
+The first, and probably most imminently useful, is the file selector. That can be accessed by typing Ctrl-O, which you might have been able to discover without this message. But rather than opening files from your native file system (which Chrome packaged apps version 1 can't do), you get this sandboxed file system which should, if this is your first use, have one file. This one.
+
+But one of the main features is that it syncs with Dropbox, and in order to enable dropbox sync, you first need to discover the second (and even more non-obvious) interface to this app. That's the command palette, which can be accessed using Ctrl-P. There, you can find commands and stuff for changing themes, syntax (though this should be detected automatically when a file is loaded), other editor settings and stuff. 
+
+But for dropbox sync, you need to first run the command named "Authorize Dropbox". Then it'll create a new window and get you through the OAuth workflow. Since this app works offline and all the code runs locally, you don't have to worry about exposing the contents of your Dropbox to nefarious third parties (read: me). Once you've returned, you need to set "Browse Mode: Remote Dropbox", so that the Ctrl-O file selector will display stuff from Dropbox rather than the local cache.
+
+This is a file which will be saved to /CloudFall-Introduction.txt, feel free to write and take notes about how you use CloudFall here.
+
+Have fun. Or at least, I sure hope your experience with this isn't too miserable.
+</pre>
+<div id="status">
+<div id="wordcount"></div>
+  <span id="build" style="display:none">
+    <img src="img/page_code.png" class="built">
+    <img src="img/page_gear.png" style="display:none" class="building">
+    <img src="img/page_error.png" style="display:none"  class="buildfail">
+  </span>
+  <span id="syncstate">
+    <img src="img/transmit_go.png" style="display:none" class="uploading">
+    <img src="img/cross.png" style="display:none" class="conflict">
+    <img src="img/tick.png" class="uploaded">
+  </span>
+  <span id="savestate">
+    <img src="img/drive_go.png" style="display:none" class="saving">
+    <img src="img/drive_disk.png" class="saved">
+</span>
+</div>
+<div id="command" style="display:none">
+  <div id="listcontainer">
+    <div id="list"></div>
+  </div>
+  <input type="text" id="text">
+</div>
+
+<script src="ace-min/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="ace-min/theme-monokai.js" type="text/javascript" charset="utf-8"></script>
+<script src="ace-min/theme-textmate.js" type="text/javascript" charset="utf-8"></script>
+<script src="dropbox/sha1.js" type="text/javascript" charset="utf-8"></script>
+<script src="dropbox/oauth.js" type="text/javascript" charset="utf-8"></script>
+<script src="dropbox/dropbox.js" type="text/javascript" charset="utf-8"></script>
+<script src="coffee-script.js"></script>
+<script src="less-1.3.0.min.js"></script>
+
+<script>
+  var editor = ace.edit("editor");
+  var EditSession = require("ace/edit_session").EditSession;
+  var UndoManager = require("ace/undomanager").UndoManager;
+
+  require("ace/multi_select").MultiSelect(editor);
+
+
+</script>
+<script src="modes.js"></script>
+<script src="commands.js"></script>
+<script>
+  loadDefaults();
+</script>
+<script src="fs.js" type="text/javascript" charset="utf-8"></script>
+
+</body>
+</html>
