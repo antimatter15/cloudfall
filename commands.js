@@ -3,6 +3,7 @@ var currentPath = '';
 var currentDirectory = null;
 
 var commands = editor.commands;
+
 commands.addCommand({
 	name: "save",
 	bindKey: {win: "Ctrl-S", mac: "Command-S"},
@@ -19,6 +20,15 @@ commands.addCommand({
 
 	}
 });
+
+
+HTMLElement.prototype.toggleClass = function(className, value){
+	var classes = this.className.split(' ').filter(function(e){
+		return e != className
+	});
+	if(value) classes.push(className);
+	this.className = classes.join(' ');
+}
 
 
 var lastWordCount = 0;
@@ -284,6 +294,22 @@ for(var name in themes){
 	addAction("Set Font Size: "+size+"px", function(){
 		editor.setFontSize(size+"px");
 	})
+});
+
+
+[2, 4, 8, 16].forEach(function(size){
+	addAction("Set Tab Size: "+size, function(){
+		editor.getSession().setTabSize(size);
+	})
+})
+
+addAction("Soft Tabs: off", function(){
+	editor.getSession().setUseSoftTabs(false)
+})
+
+
+addAction("Soft Tabs: on", function(){
+	editor.getSession().setUseSoftTabs(true);
 })
 
 addAction("Update Word Count", updateWordCount);
@@ -348,6 +374,15 @@ addAction("Show Tab Bar: On", function(){
 	document.body.toggleClass('tabs', true)
 	editor.renderer.onResize(true)
 })
+
+addAction("Show Invisibles: Off", function(){
+	editor.renderer.setShowInvisibles(false)
+})
+
+addAction("Show Invisibles: On", function(){
+	editor.renderer.setShowInvisibles(true)
+})
+
 
 for(var name in editor.commands.commands){
 	(function(command){
@@ -423,6 +458,26 @@ function loadDefault(name, session){
 	}
 	
 }
+
+function saveDefaults(){
+	var defaults = [
+		'sWrapLimitRange',
+		'sUseWrapMode',
+		'eShowPrintMargin',
+		//'eFontSize',
+		'eTheme',
+		'eShowInvisibles',
+		'sUseSoftTabs',
+		'sTabSize',
+		'eHighlightActiveLine'
+	];
+	for(var i = 0; i < defaults.length; i++){
+		storeDefault(defaults[i])
+	}
+
+	storeDefault('eFontSize', window.getComputedStyle(editor.container).getPropertyValue("font-size"))
+}
+
 function loadDefaults(session){
 	var defaults = [
 		'sWrapLimitRange',
@@ -430,6 +485,9 @@ function loadDefaults(session){
 		'eShowPrintMargin',
 		'eFontSize',
 		'eTheme',
+		'eShowInvisibles',
+		'sUseSoftTabs',
+		'sTabSize',
 		'eHighlightActiveLine'
 	];
 	for(var i = 0; i < defaults.length; i++){
@@ -451,30 +509,7 @@ function updateTheme(){
 	checkLoaded();
 }
 
-HTMLElement.prototype.toggleClass = function(className, value){
-	var classes = this.className.split(' ').filter(function(e){
-		return e != className
-	});
-	if(value) classes.push(className);
-	this.className = classes.join(' ');
-}
 
-
-function saveDefaults(){
-	var defaults = [
-		'sWrapLimitRange',
-		'sUseWrapMode',
-		'eShowPrintMargin',
-		//'eFontSize',
-		'eTheme',
-		'eHighlightActiveLine'
-	];
-	for(var i = 0; i < defaults.length; i++){
-		storeDefault(defaults[i])
-	}
-
-	storeDefault('eFontSize', window.getComputedStyle(editor.container).getPropertyValue("font-size"))
-}
 
 addAction("Save Session Defaults", function(){
 	saveDefaults();
