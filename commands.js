@@ -114,7 +114,7 @@ function autoBuild(path, data){
 				console.error(err);
 
 			}
-
+			//TODO: handle alternative extensions as well
 			expeditedSave(path.replace(".coffee",".js"), compiled)
 		}else if(modesByName.less.test(path)){
 			var parser = new(less.Parser);
@@ -129,7 +129,13 @@ function autoBuild(path, data){
 			    var compiled = tree.toCSS();
 			    expeditedSave(path.replace(".less", ".css"), compiled);
 			});
-		}else{
+		}/*else if(modesByName.markdown.test(path)){
+			var html = markdown.toHTML(data);
+			//never actually considered the fact that there might be different file names, well too bad
+
+			//I don't know if it's possible to get markdown to throw an error
+			expeditedSave(path.replace(".md", ".html"))
+		}*/else{
 			console.log("resetting", path)
 			RAWR = path
 			document.getElementById('build').style.display = 'none';
