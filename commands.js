@@ -384,6 +384,8 @@ addAction("Show Invisibles: On", function(){
 })
 
 
+
+
 for(var name in editor.commands.commands){
 	(function(command){
 		addAction("Ace Command: "+command.name, function(){
@@ -523,6 +525,23 @@ addAction("Authorize Dropbox", function(){
 	db.authorize(function(){
 		console.log("authorized")
 	})
+})
+
+
+addAction("Download Zip of Current Directory", function(){
+	var writer = new zip.BlobWriter();
+	function onerror(message) {
+		alert(message);
+	}
+	zip.createWriter(writer, function(zipWriter) {
+		zipWriter.add(file.name, new zip.BlobReader(file), function() {
+			addIndex++;
+			if (addIndex < files.length)
+				nextFile();
+			else
+				onend();
+		}, onprogress);
+	}, onerror);
 })
 
 addAction("Preview Current File", function(){
