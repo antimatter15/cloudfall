@@ -7,32 +7,53 @@ function abstractDirectoryContents(path, callback){
 	if(browse_mode == 'dropbox'){
 		db.getDirectoryContents(path, callback);	
 	}else if(browse_mode == 'local'){
-		getContents(path, function(items){
-			var index = 0;
-			var contents = [];
-			function getMeta(){
-				if(index < items.length){
-					var file = items[index];
-					file.getMetadata(function(e){
-						contents.push({
-							bytes: e.size,
-							modified: e.modificationTime,
-							size: bytesToSize(e.size),
-							path: file.fullPath,
-							is_dir: file.isDirectory
-						})
-						getMeta();
-					})
-				}else{
-					callback({
-						contents: contents
-					})
-				}
-				index++;
-			}
-			getMeta();
-		})
+		localDirectoryContents(path, callback);
 	}
+}
+
+function localDirectoryContents(path, callback){
+	getContents(path, function(items){
+		var index = 0;
+		var contents = [];
+		function getMeta(){
+			if(index < items.length){
+				var file = items[index];
+				file.getMetadata(function(e){
+					contents.push({
+						bytes: e.size,
+						modified: e.modificationTime,
+						size: bytesToSize(e.size),
+						path: file.fullPath,
+						is_dir: file.isDirectory
+					})
+					getMeta();
+				})
+			}else{
+				callback({
+					contents: contents
+				})
+			}
+			index++;
+		}
+		getMeta();
+	})
+}
+
+
+function resetStorage(){
+	getContents('/', function(items){
+		items.forEach(function(item){
+			if(item.isDirectory){
+				item.removeRecursively(function(){
+					console.log("removed directory", item.fullPath)
+				})
+			}else{
+				item.remove(function(){
+					console.log("removed file", item.fullPath)
+				})
+			}
+		})
+	})
 }
 
 

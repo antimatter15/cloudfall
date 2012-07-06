@@ -27,3 +27,7 @@ Have fun. Or at least, I sure hope your experience with this isn't too miserable
 ## Why you should use this?
 
 I don't know.
+
+## Blogpost
+
+Well, I have to write a blogpost for just about everything I do, and this is hardly worthy of an exception.

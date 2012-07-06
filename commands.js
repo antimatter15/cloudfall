@@ -82,6 +82,24 @@ commands.addCommand({
     }
 })
 
+
+function closeSession(path){
+	if((path in tabSessions) && (path in fileSessions)){
+		if(document.getElementById('tabbar').children.length <= 1){
+			console.warn("can not close last remaining session")
+			return; //can not close last remaining session
+		}
+		if(path == currentFile){
+			getTabAt(1, true).click(); //switch to another tab if this focused
+		}
+		console.log("closing path", path)
+		document.getElementById('tabbar').removeChild(tabSessions[path].el);
+		delete tabSessions[path];
+		delete fileSessions[path];	
+	}
+	
+}
+
 function getTabAt(index, relative){
     var c = document.getElementById('tabbar').children
     var children = [];
@@ -356,6 +374,8 @@ function storeDefault(name, value){
 	localStorage.setItem("SessionDefault"+name, JSON.stringify(value));
 }
 
+
+
 function loadDefault(name, session){
 	var place = name[0];
 	name = name.substr(1);
@@ -502,9 +522,14 @@ function createTab(path){
 	var tab = document.createElement('li');
 	var obj = {
 		el: tab,
-		click: function(){
-			openFile(path);
-
+		click: function(event){
+			if(event && event.button == 1){
+				console.log("close session")
+				closeSession(path);
+			}else{
+				console.log("open blah")
+				openFile(path);	
+			}
 		},
 		updatePath: function(text){
 			tabSessions[text] = tabSessions[path];
@@ -731,6 +756,13 @@ addAction("Reset last opened file", function(args){
 })
 
 
+addAction("Clear Local Storage Cache", function(){
+	if(confirm("This will remove everything that is stored locally. Make sure everything is synced first.")){
+		delete localStorage.lastOpenedFile
+		resetStorage()
+	}
+})
+
 function renderQuery(query){
 	if(paletteMode == 'search'){
 		if(query){
@@ -814,7 +846,7 @@ function renderQuery(query){
 			var e = pathcomp[pathcomp.length - 1];
 			return regex.test(e)
 		});
-		if(currentPath != '/' && "../".substr(0, query.length) == query){
+		if((currentPath != '/' && currentPath != '') && "../".substr(0, query.length) == query){
 			results.push([{
 				path: "../",
 				is_dir: "true"
@@ -851,6 +883,7 @@ function renderQuery(query){
                     e[1] = function(){
                         if(confirm("Do you want to delete "+fn+"?")){
                             abstractDeletePath(fn, e[0].is_dir)
+                            closeSession(fn); //TODO: recursively search if it's a direcotry
                             setTimeout(function(){
                             	displayPalette('file');
                             }, 762)
