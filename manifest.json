@@ -1,0 +1,16 @@
+{
+  "name": "CloudFall",
+  "version": "0.0.7.0",
+  "incognito": "split",
+  "app": {
+    "launch": {
+      "local_path": "editor.html"
+    }
+  },
+  "permissions": [
+	"tabs",
+    "unlimitedStorage",
+    "notifications",
+    "https://*.dropbox.com/"
+  ]
+}
