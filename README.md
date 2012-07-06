@@ -1,4 +1,4 @@
-![Screenshot of the first committed version of Cloudfall](screenshot.png)
+![Screenshot of the first committed version of Cloudfall](https://github.com/antimatter15/cloudfall/raw/master/screenshot.png)
 
 ## Sorry
 
