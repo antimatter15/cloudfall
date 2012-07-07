@@ -1,3 +1,12 @@
+var editor = ace.edit("editor");
+var EditSession = require("ace/edit_session").EditSession;
+var UndoManager = require("ace/undomanager").UndoManager;
+
+require("ace/multi_select").MultiSelect(editor);
+
+
+
+
 var currentFile = '';
 var currentPath = '';
 var currentDirectory = null;
@@ -993,3 +1002,6 @@ event.addListener(document.getElementById("text"), "input", function(e){
 	var query = document.getElementById("text").value;
 	renderQuery(query)
 })
+
+
+loadDefaults();	
